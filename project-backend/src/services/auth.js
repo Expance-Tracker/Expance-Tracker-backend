@@ -1,4 +1,25 @@
+import { randomBytes } from 'node:crypto';
 import { UsersCollection } from '../db/models/user.js';
+import SessionCollection from '../db/models/session.js';
+import {
+  accessTokenLifeTime,
+  refreshTokenLifeTime,
+} from '../constants/auth.js';
+
+const createSession = () => {
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
+
+  const accessTokenValidUntil = Date.now() + accessTokenLifeTime;
+  const refreshTokenValidUntil = Date.now() + refreshTokenLifeTime;
+
+  return {
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil,
+    refreshTokenValidUntil,
+  };
+};
 
 export const registerUser = async (payload) => {
   try {
@@ -11,3 +32,7 @@ export const registerUser = async (payload) => {
     throw error;
   }
 };
+
+export const findSession = (query) => SessionCollection.findOne(query);
+
+export const findUser = (query) => UsersCollection.findOne(query);
