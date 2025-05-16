@@ -1,11 +1,12 @@
-import { getTransactions } from '../services/transactionsService.js';
+import {
+  addTransaction,
+  getTransactions,
+} from '../services/transactionsService.js';
 
 export const getTransactionsController = async (req, res) => {
   const { _id: userId } = req.user;
-  //   const userId = '507f1f77bcf86cd799439011';
-  console.log('Fetching for userId:', userId);
+  // const userId = '507f1f77bcf86cd799439011';
   const data = await getTransactions(userId);
-  console.log('Found transactions:', data);
 
   res.json({
     status: 200,
@@ -13,3 +14,15 @@ export const getTransactionsController = async (req, res) => {
     data,
   });
 };
+
+// export const addTransactionsController = async (req, res, next) => {
+//   const { _id: userId } = req.user;
+
+//   const data = await addTransaction({ ...req.body, userId });
+
+//   res.status(201).json({
+//     status: 201,
+//     message: 'Successfully created a contact!',
+//     data,
+//   });
+// };
