@@ -31,6 +31,9 @@ export const registerUser = async (payload) => {
     return user;
   } catch (error) {
     console.error('Error creating user:', error);
+if (error.code === 11000) {
+      throw createHttpError(409, 'An account with this email already exists');
+    }
     throw error;
   }
 };
