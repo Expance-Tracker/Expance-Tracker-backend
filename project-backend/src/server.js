@@ -31,6 +31,10 @@ export const startServer = () => {
       message: 'Welcome to Spendy - Expense Tracker backend',
     });
   });
+  app.use('/auth', authRouter);
+
+  // маршрут transactions
+  app.use('/transactions', transactionsRouter);
 
   // Основні маршрути (включно з /auth, transactions)
   app.use(router);
