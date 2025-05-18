@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'node:crypto';
 
 import SessionCollection from '../db/models/session.js';
 import { UsersCollection } from '../db/models/user.js';
@@ -41,7 +42,7 @@ if (error.code === 11000) {
 export const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  const user = UsersCollection.findOne({ email });
+  const user = await UsersCollection.findOne({ email });
 
   if (!user) {
     throw createHttpError(401, 'Email or password invalid!');
