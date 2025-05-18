@@ -9,6 +9,7 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import router from './routers/index.js';
 import authRouter from './routers/auth.js';
 import transactionsRouter from './routers/transactionsRouter.js';
+import ratesRouter from './routers/rates.routes.js';
 
 const port = Number(getEnvVar('PORT', 3000));
 
@@ -38,9 +39,12 @@ export const startServer = () => {
 
   // маршрут transactions
   app.use('/transactions', transactionsRouter);
-
+  app.use('/rates', ratesRouter);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
+
   app.listen(port, () => console.log(`Server is running on port ${port}`));
 };
+
+startServer();
