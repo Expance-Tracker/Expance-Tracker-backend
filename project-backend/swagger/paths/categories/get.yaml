@@ -1,0 +1,47 @@
+tags:
+  - Categories
+summary: Get predefined income and expense categories
+operationId: getCategories
+description: 'Get list of categories with this endpoint'
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Successfully fetched categories!
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully fetched categories!
+            incomeCategories:
+              type: array
+              items:
+                type: string
+              example: ['Incomes']
+            expenseCategories:
+              type: array
+              items:
+                type: string
+              example:
+                [
+                  'Main expenses',
+                  'Self сare',
+                  'Child, care',
+                  'Products',
+                  'Car',
+                  'Education',
+                  'Leisure',
+                  'Household products',
+                  'Entertainment',
+                  'Other expenses',
+                ]
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
