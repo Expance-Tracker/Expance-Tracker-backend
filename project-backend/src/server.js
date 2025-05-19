@@ -9,6 +9,7 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import router from './routers/index.js';
 import authRouter from './routers/auth.js';
 import transactionsRouter from './routers/transactionsRouter.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const port = Number(getEnvVar('PORT', 3000));
 
@@ -18,6 +19,7 @@ export const startServer = () => {
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
+  app.use('/api-docs', swaggerDocs());
   app.use(
     pino({
       transport: {
@@ -25,9 +27,6 @@ export const startServer = () => {
       },
     }),
   );
-
-  // Основні маршрути (включно з /auth)
-  app.use(router);
 
   app.get('/', (req, res) => {
     res.json({
@@ -38,6 +37,9 @@ export const startServer = () => {
 
   // маршрут transactions
   app.use('/transactions', transactionsRouter);
+
+  // Основні маршрути (включно з /auth, transactions)
+  app.use(router);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
