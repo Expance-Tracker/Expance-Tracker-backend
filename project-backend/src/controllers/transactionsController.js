@@ -1,8 +1,11 @@
-import { getTransactions } from '../services/transactionsService.js';
+import createHttpError from 'http-errors';
+import {
+  deleteTransactionByID,
+  getTransactions,
+} from '../services/transactionsService.js';
 
 export const getTransactionsController = async (req, res) => {
   const { _id: userId } = req.user;
-  //   const userId = '507f1f77bcf86cd799439011';
   console.log('Fetching for userId:', userId);
   const data = await getTransactions(userId);
   console.log('Found transactions:', data);
@@ -12,4 +15,17 @@ export const getTransactionsController = async (req, res) => {
     message: 'Transactions fetched successfully!',
     data,
   });
+};
+
+export const deleteTransactionsContactController = async (req, res) => {
+  const { id } = req.params;
+  const { _id: userId } = req.user;
+
+  const data = await deleteTransactionByID(id, userId);
+
+  if (!data) {
+    throw createHttpError(404, 'Transaction not found');
+  }
+
+  res.status(204).send();
 };

@@ -1,20 +1,23 @@
 import mongoose from 'mongoose';
-
 import { getEnvVar } from '../utils/getEnvVar.js';
 
 export const initMongoDB = async () => {
   try {
-    const user = getEnvVar('MONGODB_USER');
-    const pwd = getEnvVar('MONGODB_PASSWORD');
-    const url = getEnvVar('MONGODB_URL');
-    const db = getEnvVar('MONGODB_DB');
+    const user = encodeURIComponent(getEnvVar('MONGODB_USER'));
+    const password = encodeURIComponent(getEnvVar('MONGODB_PASSWORD'));
+    const db = encodeURIComponent(getEnvVar('MONGODB_DB'));
+    const host = getEnvVar('MONGODB_URL').replace(/^mongodb(\+srv)?:\/\//, '');
+    const connectionString = `mongodb+srv://${user}:${password}@${host}/${db}?retryWrites=true&w=majority`;
 
-    await mongoose.connect(
-      `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority`,
-    );
-    console.log('Mongo connection successfully established!');
-  } catch (e) {
-    console.log('Error while setting up mongo connection', e);
-    throw e;
+    await mongoose.connect(connectionString, {
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
+      socketTimeoutMS: 30000,
+    });
+
+    console.log('✅ MongoDB connected successfully!');
+  } catch (error) {
+    console.error('❌ Critical MongoDB connection error:');
+    process.exit(1);
   }
 };
