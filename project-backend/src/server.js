@@ -6,10 +6,11 @@ import cookieParser from 'cookie-parser';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { getEnvVar } from './utils/getEnvVar.js';
-import router from './routers/index.js';
+// import router from './routers/index.js';
 import authRouter from './routers/auth.js';
 import transactionsRouter from './routers/transactionsRouter.js';
 import ratesRouter from './routers/rates.routes.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const port = Number(getEnvVar('PORT', 3000));
 
