@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'node:crypto';
 
 import SessionCollection from '../db/models/session.js';
 import { UsersCollection } from '../db/models/user.js';
@@ -31,14 +32,21 @@ export const registerUser = async (payload) => {
     return user;
   } catch (error) {
     console.error('Error creating user:', error);
+    if (error.code === 11000) {
+      throw createHttpError(409, 'An account with this email already exists');
+    }
     throw error;
   }
 };
 
+export const findSession = (query) => SessionCollection.findOne(query);
+
+export const findUser = (query) => UsersCollection.findOne(query);
+
 export const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  const user = UsersCollection.findOne({ email });
+  const user = await UsersCollection.findOne({ email });
 
   if (!user) {
     throw createHttpError(401, 'Email or password invalid!');
