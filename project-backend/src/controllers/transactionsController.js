@@ -1,28 +1,14 @@
-// import { getTransactions } from '../services/transactionsService.js';
-
-// export const getTransactionsController = async (req, res) => {
-//   // const { _id: userId } = req.user;
-//   const userId = '507f1f77bcf86cd799439011';
-//   console.log('Fetching for userId:', userId);
-//   const data = await getTransactions(userId);
-//   console.log('Found transactions:', data);
-
-//   res.json({
-//     status: 200,
-//     message: 'Transactions fetched successfully!',
-//     data,
-//   });
-// };
-
-
-
-
-// src/controllers/transactionsController.js
-
-import { createTransaction, getTransactions } from '../services/transactionsService.js';
+import createHttpError from 'http-errors';
+import {
+  createTransaction,
+  deleteTransactionByID,
+  getTransactions,
+} from '../services/transactionsService.js';
 
 export const getTransactionsController = async (req, res) => {
-  const userId = '507f1f77bcf86cd799439011';
+  const { _id: userId } = req.user;
+  console.log('Fetching for userId:', userId);
+
   const data = await getTransactions(userId);
 
   res.json({
@@ -33,7 +19,7 @@ export const getTransactionsController = async (req, res) => {
 };
 
 export const createTransactionController = async (req, res) => {
-  const userId = '507f1f77bcf86cd799439011';
+  const { _id: userId } = req.user;
   const newTransaction = await createTransaction({ ...req.body, userId });
 
   res.status(201).json({
@@ -41,4 +27,17 @@ export const createTransactionController = async (req, res) => {
     message: 'Transaction created successfully',
     data: newTransaction,
   });
+};
+
+export const deleteTransactionsContactController = async (req, res) => {
+  const { id } = req.params;
+  const { _id: userId } = req.user;
+
+  const data = await deleteTransactionByID(id, userId);
+
+  if (!data) {
+    throw createHttpError(404, 'Transaction not found');
+  }
+
+  res.status(204).send();
 };

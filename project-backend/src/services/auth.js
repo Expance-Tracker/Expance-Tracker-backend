@@ -32,12 +32,16 @@ export const registerUser = async (payload) => {
     return user;
   } catch (error) {
     console.error('Error creating user:', error);
-if (error.code === 11000) {
+    if (error.code === 11000) {
       throw createHttpError(409, 'An account with this email already exists');
     }
     throw error;
   }
 };
+
+export const findSession = (query) => SessionCollection.findOne(query);
+
+export const findUser = (query) => UsersCollection.findOne(query);
 
 export const loginUser = async (payload) => {
   const { email, password } = payload;
