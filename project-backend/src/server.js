@@ -11,6 +11,7 @@ import ratesRouter from './routers/rates.routes.js';
 import router from './routers/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import transactionsRouter from './routers/transactionsRouter.js';
+import statisticsRouter from './routers/statisticsRouter.js';
 import userRouter from './routers/userRoutes.js';
 
 const port = Number(getEnvVar('PORT', 3000));
@@ -39,6 +40,7 @@ export const startServer = () => {
 
   app.use('/auth', authRouter);
   app.use('/transactions', transactionsRouter);
+  app.use('/statistics', statisticsRouter);
   app.use('/user', userRouter);
   app.use('/rates', ratesRouter);
 
@@ -49,6 +51,6 @@ export const startServer = () => {
   app.listen(port, () =>
     console.log(`🚀 Server is running on port ${port}`)
   );
-}
+};
 
 startServer();
