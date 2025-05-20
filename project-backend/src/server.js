@@ -11,9 +11,7 @@ import ratesRouter from './routers/rates.routes.js';
 import router from './routers/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import transactionsRouter from './routers/transactionsRouter.js';
-
 import statisticsRouter from './routers/statisticsRouter.js';
-
 import userRouter from './routers/userRoutes.js';
 
 
@@ -43,7 +41,6 @@ export const startServer = () => {
 
   app.use('/auth', authRouter);
   app.use('/transactions', transactionsRouter);
-
   app.use('/statistics', statisticsRouter);
   // Основні маршрути (включно з /auth, transactions)
 
