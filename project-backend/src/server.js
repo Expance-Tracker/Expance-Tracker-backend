@@ -9,7 +9,7 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import router from './routers/index.js';
 import authRouter from './routers/auth.js';
 import transactionsRouter from './routers/transactionsRouter.js';
-
+import statisticsRouter from './routers/statisticsRouter.js';
 const port = Number(getEnvVar('PORT', 3000));
 
 export const startServer = () => {
@@ -35,7 +35,7 @@ export const startServer = () => {
 
   // маршрут transactions
   app.use('/transactions', transactionsRouter);
-
+  app.use('/statistics', statisticsRouter);
   // Основні маршрути (включно з /auth, transactions)
   app.use(router);
 
