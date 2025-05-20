@@ -11,23 +11,24 @@ export const registerUserController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+  const { newSession, user } = await loginUser(req.body);
 
-  res.cookie('sessionId', session._id, {
+  res.cookie('sessionId', newSession._id, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntil,
+    expires: newSession.refreshTokenValidUntil,
   });
 
-  res.cookie('refreshToken', session.refreshToken, {
+  res.cookie('refreshToken', newSession.refreshToken, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntil,
+    expires: newSession.refreshTokenValidUntil,
   });
 
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
     data: {
-      accessToken: session.accessToken,
+      accessToken: newSession.accessToken,
+      ...user,
     },
   });
 };
