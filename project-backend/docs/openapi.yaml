@@ -21,6 +21,11 @@ paths:
       /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
+
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout/post.yaml
+ 
 components:
   securitySchemes:
     bearerAuth:
