@@ -1,14 +1,13 @@
-import createHttpError from 'http-errors';
-import bcrypt from 'bcrypt';
-import { randomBytes } from 'node:crypto';
-
-import SessionCollection from '../db/models/session.js';
-import { UsersCollection } from '../db/models/user.js';
 import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
 import { log } from 'node:console';
+
+import SessionCollection from '../db/models/session.js';
+import {User} from '../db/models/user.js';
+import createHttpError from 'http-errors';
+import { randomBytes } from 'node:crypto';
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -28,7 +27,7 @@ const createSession = () => {
 export const registerUser = async (payload) => {
   try {
     console.log('Attempting to create user with payload:', payload);
-    const user = await UsersCollection.create(payload);
+    const user = await User.create(payload);
     console.log('User created successfully:', user);
     return user;
   } catch (error) {
@@ -48,12 +47,12 @@ export const logoutUser = async (sessionId) => {
 
 export const findSession = (query) => SessionCollection.findOne(query);
 
-export const findUser = (query) => UsersCollection.findOne(query);
+export const findUser = (query) => User.findOne(query);
 
 export const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  const user = await UsersCollection.findOne({ email });
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw createHttpError(401, 'Email or password invalid!');

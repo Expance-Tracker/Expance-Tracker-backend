@@ -19,8 +19,8 @@ paths:
     get:
       $ref: ../swagger/paths/categories/get.yaml
       /statistics/summary:
-    get:
-      $ref: ../swagger/paths/statistics/summary.yaml
+        get:
+          $ref: ../swagger/paths/statistics/summary.yaml
   /transactions:
     get:
       $ref: ../swagger/paths/transactions/get.yaml
@@ -31,7 +31,7 @@ paths:
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
- 
+
 components:
   securitySchemes:
     bearerAuth:

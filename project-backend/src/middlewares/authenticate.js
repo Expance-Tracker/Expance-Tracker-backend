@@ -1,7 +1,8 @@
-import createHttpError from 'http-errors';
 import { findSession, findUser } from '../services/auth.js';
 
-export const authenticate = async (req, res, next) => {
+import createHttpError from 'http-errors';
+
+const authenticate = async (req, res, next) => {
   //   const { authorization } = req.headers;
   const authorization = req.get('Authorization');
   if (!authorization) {
@@ -31,3 +32,4 @@ export const authenticate = async (req, res, next) => {
 
   next();
 };
+export default authenticate;
