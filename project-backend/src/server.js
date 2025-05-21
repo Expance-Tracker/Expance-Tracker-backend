@@ -28,7 +28,7 @@ export const startServer = () => {
       transport: {
         target: 'pino-pretty',
       },
-    })
+    }),
   );
 
   app.get('/', (req, res) => {
@@ -46,9 +46,5 @@ export const startServer = () => {
   app.use(notFoundHandler);
   app.use(errorHandler);
 
-  app.listen(port, () =>
-    console.log(`🚀 Server is running on port ${port}`)
-  );
-}
-
-startServer();
+  app.listen(port, () => console.log(`🚀 Server is running on port ${port}`));
+};
