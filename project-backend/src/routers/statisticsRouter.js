@@ -1,5 +1,5 @@
+import authenticate from '../middlewares/authenticate.js';
 import express from 'express';
-import { authenticate } from '../middlewares/authenticate.js';
 import { getPeriodSummaryController } from '../controllers/statisticsController.js';
 
 const router = express.Router();
