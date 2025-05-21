@@ -1,5 +1,6 @@
 import createHttpError from 'http-errors';
 import {
+  createTransaction,
   deleteTransactionByID,
   getTransactions,
 } from '../services/transactionsService.js';
@@ -7,13 +8,24 @@ import {
 export const getTransactionsController = async (req, res) => {
   const { _id: userId } = req.user;
   console.log('Fetching for userId:', userId);
+
   const data = await getTransactions(userId);
-  console.log('Found transactions:', data);
 
   res.json({
     status: 200,
     message: 'Transactions fetched successfully!',
     data,
+  });
+};
+
+export const createTransactionController = async (req, res) => {
+  const { _id: userId } = req.user;
+  const newTransaction = await createTransaction({ ...req.body, userId });
+
+  res.status(201).json({
+    status: 201,
+    message: 'Transaction created successfully',
+    data: newTransaction,
   });
 };
 

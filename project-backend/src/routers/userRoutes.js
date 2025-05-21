@@ -1,11 +1,12 @@
 import { getBalance, updateProfile } from '../controllers/userController.js';
 
-import authenticate from '../middlewares/authenticate.js';
-import express from 'express';
+import { Router } from 'express';
+import  authenticate  from '../middlewares/authenticate.js';
 
-const router = express.Router();
+const userRouter = Router();
 
-router.get('/balance', authenticate, getBalance);
-router.patch('/profile', authenticate, updateProfile);
+userRouter.get('/balance', authenticate, getBalance);
 
-export default router;
+userRouter.patch('/profile', authenticate, updateProfile);
+
+export default userRouter;

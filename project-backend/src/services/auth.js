@@ -2,6 +2,7 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
+import { log } from 'node:console';
 
 import SessionCollection from '../db/models/session.js';
 import {User} from '../db/models/user.js';
@@ -38,6 +39,12 @@ export const registerUser = async (payload) => {
   }
 };
 
+// logout
+
+export const logoutUser = async (sessionId) => {
+  await SessionCollection.deleteOne({ _id: sessionId });
+};
+
 export const findSession = (query) => SessionCollection.findOne(query);
 
 export const findUser = (query) => User.findOne(query);
@@ -64,8 +71,16 @@ export const loginUser = async (payload) => {
 
   const session = createSession();
 
-  return SessionCollection.create({
+  const newSession = await SessionCollection.create({
     userId: user._id,
     ...session,
   });
+
+  return {
+    newSession,
+    user: {
+      name: user.name,
+      email: user.email,
+    },
+  };
 };
