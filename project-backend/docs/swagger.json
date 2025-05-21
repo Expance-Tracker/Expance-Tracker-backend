@@ -64,28 +64,61 @@
                     "incomeCategories": {
                       "type": "array",
                       "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "Incomes"
-                      ]
+                        "$ref": "#/components/schemas/category",
+                        "example": [
+                          {
+                            "id": "664b04ae87c2f221f99d3c01",
+                            "name": "Incomes"
+                          }
+                        ]
+                      }
                     },
                     "expenseCategories": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/category"
                       },
                       "example": [
-                        "Main expenses",
-                        "Self сare",
-                        "Child, care",
-                        "Products",
-                        "Car",
-                        "Education",
-                        "Leisure",
-                        "Household products",
-                        "Entertainment",
-                        "Other expenses"
+                        {
+                          "id": "664b04ae87c2f221f99d3c02",
+                          "name": "Main expenses"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c03",
+                          "name": "Products"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c04",
+                          "name": "Car"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c05",
+                          "name": "Self care"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c06",
+                          "name": "Child care"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c07",
+                          "name": "Household products"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c08",
+                          "name": "Education"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c09",
+                          "name": "Leisure"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c10",
+                          "name": "Other expenses"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c11",
+                          "name": "Entertainment"
+                        }
                       ]
                     }
                   }
@@ -93,8 +126,8 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -416,6 +449,87 @@
         "scheme": "bearer"
       }
     },
+    "schemas": {
+      "category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the category",
+            "example": "664b04ae87c2f221f99d3c61"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the category",
+            "example": "Products"
+          }
+        }
+      },
+      "transactions": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the transaction",
+            "example": "66507f2cabc1234567890abc"
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID of the user who owns the transaction",
+            "example": "664abcdeff1234567890abcd"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "+",
+              "-"
+            ],
+            "description": "Transaction type — income (\"+\") or expense (\"-\")",
+            "example": "+"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "Amount of the transaction",
+            "example": 100.5
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of the transaction",
+            "example": "Food"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date of the transaction",
+            "example": "2024-05-20T12:34:56.789Z"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Optional comment about the transaction",
+            "example": "Grocery shopping"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-05-20T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-05-21T08:15:00.000Z"
+          }
+        },
+        "required": [
+          "userId",
+          "type",
+          "amount",
+          "category",
+          "date"
+        ]
+      }
+    },
     "responses": {
       "400": {
         "description": "Bad Request",
@@ -519,7 +633,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Contact or user not found"
+                      "example": "Not found"
                     }
                   }
                 }
@@ -564,71 +678,6 @@
             }
           }
         }
-      }
-    },
-    "schemas": {
-      "transactions": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "description": "Unique identifier for the transaction",
-            "example": "66507f2cabc1234567890abc"
-          },
-          "userId": {
-            "type": "string",
-            "description": "ID of the user who owns the transaction",
-            "example": "664abcdeff1234567890abcd"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "+",
-              "-"
-            ],
-            "description": "Transaction type — income (\"+\") or expense (\"-\")",
-            "example": "+"
-          },
-          "amount": {
-            "type": "number",
-            "format": "float",
-            "description": "Amount of the transaction",
-            "example": 100.5
-          },
-          "category": {
-            "type": "string",
-            "description": "Category of the transaction",
-            "example": "Food"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Date of the transaction",
-            "example": "2024-05-20T12:34:56.789Z"
-          },
-          "comment": {
-            "type": "string",
-            "description": "Optional comment about the transaction",
-            "example": "Grocery shopping"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-05-20T12:34:56.789Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-05-21T08:15:00.000Z"
-          }
-        },
-        "required": [
-          "userId",
-          "type",
-          "amount",
-          "category",
-          "date"
-        ]
       }
     }
   }
