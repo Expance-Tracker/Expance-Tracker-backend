@@ -1,0 +1,68 @@
+tags:
+  - Transactions
+summary: Create transaction
+operationId: createTransaction
+description: 'Create a new transaction'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - type
+          - amount
+          - category
+          - date
+        properties:
+          type:
+            description: 'Transaction type (income or expense)'
+            type: string
+            enum: ['income', 'expense']
+            example: 'income'
+          amount:
+            description: 'Transaction amount'
+            type: number
+            format: double
+            minimum: 0
+            example: 1000.00
+          category:
+            description: 'Transaction category'
+            type: string
+            example: 'Incomes'
+          date:
+            description: 'Transaction date'
+            type: string
+            format: date-time
+            example: '2025-04-23T10:00:00Z'
+          comment:
+            description: 'Transaction comment (optional)'
+            type: string
+            example: 'Зарплата'
+responses:
+  '201':
+    description: 'Creates a transaction'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Transaction created successfully'
+            data:
+              $ref: '../../components/schemas/transactions.yaml'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

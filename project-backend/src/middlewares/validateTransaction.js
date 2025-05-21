@@ -1,12 +1,14 @@
-// middlewares/validateTransaction.js
 import Joi from 'joi';
+import { transactionList } from '../constants/transactions.js';
 
 const transactionSchema = Joi.object({
-  type: Joi.string().valid('+', '-').required(),
+  type: Joi.string()
+    .valid(...transactionList)
+    .required(),
   amount: Joi.number().positive().max(1000000).required(),
   category: Joi.string().required(),
   date: Joi.date().iso().required(),
-  comment: Joi.string().min(2).max(192).optional(),
+  comment: Joi.string().min(2).max(192).optional().allow(''),
 });
 
 export const validateTransaction = (req, res, next) => {

@@ -16,7 +16,7 @@ export const startServer = () => {
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
-  app.use('/api-docs', swaggerDocs);
+  app.use('/api-docs', swaggerDocs());
 
   app.use(
     pino({

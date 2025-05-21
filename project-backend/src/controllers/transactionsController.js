@@ -20,7 +20,12 @@ export const getTransactionsController = async (req, res) => {
 
 export const createTransactionController = async (req, res) => {
   const { _id: userId } = req.user;
-  const newTransaction = await createTransaction({ ...req.body, userId });
+
+  const newTransaction = await createTransaction({
+    ...req.body,
+    userId,
+    amount: Number(req.body.amount),
+  });
 
   res.status(201).json({
     status: 201,

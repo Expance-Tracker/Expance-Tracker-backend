@@ -11,6 +11,8 @@ tags:
     description: Operations about users.
   - name: Auth
     description: Auth operations.
+  - name: Transactions
+    description: Operations for managing transactions.
 servers:
   - url: http://localhost:3000
   - url: https://example.com/api/v1
@@ -21,6 +23,11 @@ paths:
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
+  /transactions:
+    post:
+      $ref: ../swagger/paths/transactions/post.yaml
+    get:
+      $ref: ../swagger/paths/transactions/get.yaml
 components:
   securitySchemes:
     bearerAuth:
