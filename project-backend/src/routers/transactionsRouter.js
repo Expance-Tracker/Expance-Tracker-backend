@@ -1,10 +1,11 @@
-import { Router } from 'express';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   deleteTransactionsContactController,
   getTransactionsController,
 } from '../controllers/transactionsController.js';
-import { authenticate } from '../middlewares/authenticate.js';
+
+import { Router } from 'express';
+import authenticate  from '../middlewares/authenticate.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
 
 const transactionsRouter = Router();

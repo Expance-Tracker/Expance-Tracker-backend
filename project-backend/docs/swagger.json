@@ -73,10 +73,15 @@
                       },
                       "example": [
                         "Main expenses",
+                        "Self сare",
+                        "Child, care",
                         "Products",
                         "Car",
                         "Education",
-                        "Leisure"
+                        "Leisure",
+                        "Household products",
+                        "Entertainment",
+                        "Other expenses"
                       ]
                     }
                   }
