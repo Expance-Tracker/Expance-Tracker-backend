@@ -1,19 +1,16 @@
-const User = require('../models/User');
+import User from '../models/User.js';
 
-// Отримання балансу
-const getBalance = async (req, res, next) => {
+export const getBalance = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'Користувача не знайдено' });
-
     res.status(200).json({ balance: user.balance });
   } catch (error) {
     next(error);
   }
 };
 
-// Оновлення профілю
-const updateProfile = async (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
   try {
     const { name, email } = req.body;
 
@@ -29,9 +26,4 @@ const updateProfile = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getBalance,
-  updateProfile,
 };
