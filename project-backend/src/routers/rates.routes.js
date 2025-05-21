@@ -1,8 +1,8 @@
 import express from 'express';
 import { fetchRates } from '../controllers/ratesController.js';
 
-const router = express.Router();
+const ratesRrouter = express.Router();
 
-router.get('/', fetchRates);
+ratesRrouter.get('/', fetchRates);
 
-export default router;
+export default ratesRrouter;

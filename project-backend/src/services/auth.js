@@ -8,6 +8,7 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
+import { log } from 'node:console';
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -71,8 +72,16 @@ export const loginUser = async (payload) => {
 
   const session = createSession();
 
-  return SessionCollection.create({
+  const newSession = await SessionCollection.create({
     userId: user._id,
     ...session,
   });
+
+  return {
+    newSession,
+    user: {
+      name: user.name,
+      email: user.email,
+    },
+  };
 };

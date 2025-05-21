@@ -1,10 +1,12 @@
-const User = require('../models/User');
+// const User = require('../models/User');
+import { User } from '../models/User.js';
 
 // Отримання балансу
-const getBalance = async (req, res, next) => {
+export const getBalance = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'Користувача не знайдено' });
+    if (!user)
+      return res.status(404).json({ message: 'Користувача не знайдено' });
 
     res.status(200).json({ balance: user.balance });
   } catch (error) {
@@ -13,25 +15,21 @@ const getBalance = async (req, res, next) => {
 };
 
 // Оновлення профілю
-const updateProfile = async (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
   try {
     const { name, email } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { name, email },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
-    if (!updatedUser) return res.status(404).json({ message: 'Користувача не знайдено' });
+    if (!updatedUser)
+      return res.status(404).json({ message: 'Користувача не знайдено' });
 
     res.status(200).json({ user: updatedUser });
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getBalance,
-  updateProfile,
 };

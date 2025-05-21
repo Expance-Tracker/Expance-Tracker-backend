@@ -21,6 +21,12 @@ paths:
       /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
+  /transactions:
+    get:
+      $ref: ../swagger/paths/transactions/get.yaml
+  /transactions/{id}:
+    delete:
+      $ref: ../swagger/paths/transactions/{id}/delete.yaml
 
   /auth/logout:
     post:
