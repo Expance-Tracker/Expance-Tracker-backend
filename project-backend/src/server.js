@@ -4,14 +4,11 @@ import cors from 'cors';
 import { errorHandler } from './middlewares/errorHandler.js';
 import express from 'express';
 import { getEnvVar } from './utils/getEnvVar.js';
-import morgan from 'morgan';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import pino from 'pino-http';
 import ratesRouter from './routers/rates.routes.js';
 import router from './routers/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
-import transactionsRouter from './routers/transactionsRouter.js';
-import userRouter from './routers/userRoutes.js';
 
 const port = Number(getEnvVar('PORT', 3000));
 
@@ -37,9 +34,6 @@ export const startServer = () => {
     });
   });
 
-  app.use('/auth', authRouter);
-  app.use('/transactions', transactionsRouter);
-  app.use('/user', userRouter);
   app.use('/rates', ratesRouter);
 
   app.use(router);
