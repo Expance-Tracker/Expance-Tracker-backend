@@ -8,6 +8,11 @@ import pino from 'pino-http';
 import router from './routers/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
+import transactionsRouter from './routers/transactionsRouter.js';
+import userRouter from './routers/userRoutes.js';
+
+
+
 const port = Number(getEnvVar('PORT', 3000));
 
 export const startServer = () => {
@@ -32,9 +37,26 @@ export const startServer = () => {
     });
   });
 
+
+  app.use('/auth', authRouter);
+  app.use('/transactions', transactionsRouter);
+  app.use('/user', userRouter);
+  app.use('/rates', ratesRouter);
+
+
+
   app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
+  app.listen(port, () =>
+    console.log(`🚀 Server is running on port ${port}`)
+  );
+};
+
+startServer();
+
+
   app.listen(port, () => console.log(`🚀 Server is running on port ${port}`));
 };
+
