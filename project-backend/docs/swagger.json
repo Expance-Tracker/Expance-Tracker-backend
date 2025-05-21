@@ -11,17 +11,10 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
-    },
-    {
-      "url": "https://example.com/api/v1"
+      "url": "https://expance-tracker-backend-9zu7.onrender.com"
     }
   ],
   "tags": [
-    {
-      "name": "Users",
-      "description": "Operations about users."
-    },
     {
       "name": "Auth",
       "description": "Auth operations."
