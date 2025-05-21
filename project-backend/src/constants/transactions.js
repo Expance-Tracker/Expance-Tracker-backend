@@ -1,1 +1,1 @@
-export const transactionList = ['income', 'expense'];
+export const transactionList = ['+', '-'];

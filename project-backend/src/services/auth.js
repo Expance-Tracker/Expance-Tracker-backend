@@ -40,6 +40,12 @@ export const registerUser = async (payload) => {
   }
 };
 
+// logout
+
+export const logoutUser = async (sessionId) => {
+  await SessionCollection.deleteOne({ _id: sessionId });
+};
+
 export const findSession = (query) => SessionCollection.findOne(query);
 
 export const findUser = (query) => UsersCollection.findOne(query);
