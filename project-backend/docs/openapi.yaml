@@ -18,15 +18,20 @@ paths:
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
-      /statistics/summary:
-        get:
-          $ref: ../swagger/paths/statistics/summary.yaml
+
+  /statistics/summary:
+    get:
+      $ref: ../swagger/paths/statistics/summary.yaml
+
   /transactions:
     get:
       $ref: ../swagger/paths/transactions/get.yaml
+
   /transactions/{id}:
     delete:
       $ref: ../swagger/paths/transactions/{id}/delete.yaml
+    put:
+      $ref: ../swagger/paths/transactions/{id}/put.yaml
 
   /auth/logout:
     post:

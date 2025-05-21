@@ -30,11 +30,6 @@
   "paths": {
     "/categories": {
       "get": {
-        "/statistics/summary": {
-          "get": {
-            "$ref": "../swagger/paths/statistics/summary.yaml"
-          }
-        },
         "tags": [
           "Categories"
         ],
@@ -100,6 +95,75 @@
           "500": {
             "$ref": "#/components/responses/500"
           }
+        }
+      }
+    },
+    "/statistics/summary": {
+      "get": {
+        "get": {
+          "tags": [
+            "Statistics"
+          ],
+          "summary": "Get income/expense report for a specific month",
+          "description": "Returns total amounts of income and expenses grouped by categories for the selected month.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "month",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "2024-11"
+              },
+              "description": "Month in YYYY-MM format"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "example": [
+                    {
+                      "type": "expense",
+                      "totalAmount": 350,
+                      "categories": [
+                        {
+                          "category": "Food",
+                          "total": 200
+                        },
+                        {
+                          "category": "Transport",
+                          "total": 150
+                        }
+                      ]
+                    },
+                    {
+                      "type": "income",
+                      "totalAmount": 3000,
+                      "categories": [
+                        {
+                          "category": "Salary",
+                          "total": 3000
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid or missing month parameter"
+            },
+            "401": {
+              "description": "Unauthorized – Access token missing or expired"
+            }
+          },
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
         }
       }
     },
@@ -186,6 +250,124 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a transaction",
+        "tags": [
+          "Transactions"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Transaction ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount",
+                  "category",
+                  "date",
+                  "type"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 150.5
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Utilities"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-05-18"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "+",
+                      "-"
+                    ],
+                    "example": "-"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Paid for gas"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "type": "object",
+                          "example": {
+                            "_id": "682b830e2e994e13ac53c7e5",
+                            "userId": "682b827b2e994e13ac53c7dd",
+                            "type": "-",
+                            "amount": 150.5,
+                            "category": "Utilities",
+                            "date": "2025-05-18",
+                            "comment": "Paid for gas",
+                            "createdAt": "2025-05-19T19:14:22.538Z",
+                            "updatedAt": "2025-05-19T19:25:00.123Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
