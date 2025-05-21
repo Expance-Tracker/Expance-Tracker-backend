@@ -25,6 +25,10 @@
     {
       "name": "Auth",
       "description": "Auth operations."
+    },
+    {
+      "name": "Transactions",
+      "description": "Operations related to user transactions."
     }
   ],
   "paths": {
