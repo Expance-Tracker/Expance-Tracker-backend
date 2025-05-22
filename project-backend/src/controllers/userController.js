@@ -1,21 +1,26 @@
-<<<<<<< HEAD
+
 // const User = require('../models/User');
 import { User } from '../models/User.js';
 
-// Отримання балансу
+import { User } from '../db/models/user.js';
+
+
 export const getBalance = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
+
     if (!user)
       return res.status(404).json({ message: 'Користувача не знайдено' });
-=======
+
 import { User } from '../db/models/user.js';
 
 export const getBalance = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
->>>>>>> fd6a6a4 (add swagger-statistics)
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
 
     res.status(200).json({ balance: user.balance });
   } catch (error) {
@@ -23,10 +28,8 @@ export const getBalance = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
 // Оновлення профілю
-=======
->>>>>>> fd6a6a4 (add swagger-statistics)
+
 export const updateProfile = async (req, res, next) => {
   try {
     const { name, email } = req.body;
@@ -38,11 +41,13 @@ export const updateProfile = async (req, res, next) => {
     );
 
     if (!updatedUser)
-<<<<<<< HEAD
+
       return res.status(404).json({ message: 'Користувача не знайдено' });
-=======
+
       return res.status(404).json({ message: 'User not found' });
->>>>>>> fd6a6a4 (add swagger-statistics)
+
+      return res.status(404).json({ message: 'User not found' });
+
 
     res.status(200).json({ user: updatedUser });
   } catch (error) {

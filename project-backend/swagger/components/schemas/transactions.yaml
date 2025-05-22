@@ -3,51 +3,46 @@ properties:
   _id:
     type: string
     description: Unique identifier for the transaction
-    example: 66507f2cabc1234567890abc
-
+    example: 645a1b2c3d4e5f6789abcdef
   userId:
     type: string
     description: ID of the user who owns the transaction
-    example: 664abcdeff1234567890abcd
-
+    example: 645a1b2c3d4e5f6789abcde0
   type:
     type: string
-    enum: ['+', '-']
-    description: Transaction type — income ("+") or expense ("-")
-    example: '+'
-
+    enum: ['income', 'expense']
+    description: Transaction type — income or expense
+    example: income
   amount:
     type: number
     format: float
     description: Amount of the transaction
-    example: 100.5
-
+    example: 1000.00
   category:
     type: string
     description: Category of the transaction
-    example: Food
-
+    example: Incomes
   date:
     type: string
     format: date-time
     description: Date of the transaction
-    example: 2024-05-20T12:34:56.789Z
-
+    example: 2025-04-23T10:00:00.000Z
   comment:
     type: string
     description: Optional comment about the transaction
-    example: Grocery shopping
-
+    example: Зарплата
   createdAt:
     type: string
     format: date-time
-    example: 2024-05-20T12:34:56.789Z
-
+    description: Creation timestamp
+    example: 2025-05-21T12:34:56.789Z
   updatedAt:
     type: string
     format: date-time
-    example: 2024-05-21T08:15:00.000Z
+    description: Last update timestamp
+    example: 2025-05-21T12:34:56.789Z
 required:
+  - _id
   - userId
   - type
   - amount

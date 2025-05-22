@@ -21,4 +21,4 @@ content:
           properties:
             message:
               type: string
-              example: 'Invalid or missing contact ID or malformed request data. Please check your input and try again.'
+              example: 'Invalid or malformed request data. Please check your input and try again.'

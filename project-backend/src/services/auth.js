@@ -12,6 +12,11 @@ import createHttpError from 'http-errors';
 import { randomBytes } from 'node:crypto';
 >>>>>>> fd6a6a4 (add swagger-statistics)
 
+import SessionCollection from '../db/models/session.js';
+import {User} from '../db/models/user.js';
+import createHttpError from 'http-errors';
+import { randomBytes } from 'node:crypto';
+
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');

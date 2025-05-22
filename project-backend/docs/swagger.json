@@ -20,13 +20,15 @@
       "description": "Auth operations."
     },
     {
+
       "name": "Statistics",
       "description": "Operations related to transaction summaries"
     },
     {
       "name": "Transactions",
       "description": "Operations for managing transactions."
-
+      "name": "Transactions",
+      "description": "Operations for managing transactions."
     }
   ],
   "paths": {
@@ -200,7 +202,6 @@
         }
       }
     },
-
     "/statistics/summary": {
         "get": {
           "tags": [
@@ -266,6 +267,7 @@
               "bearerAuth": []
             }
           ]
+
         }
       }
     },
@@ -482,6 +484,10 @@
   }
 },
 
+=======
+        }
+      }
+    },
     "/transactions": {
       "get": {
         "summary": "Get all transactions",
@@ -567,10 +573,126 @@
             "description": "Internal server error"
           }
         }
+      },
+      "put": {
+        "summary": "Update a transaction",
+        "tags": [
+          "Transactions"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Transaction ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount",
+                  "category",
+                  "date",
+                  "type"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 150.5
+                  },
+                  "category": {
+                    "type": "string",
+                    "example": "Utilities"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-05-18"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "income",
+                      "expense"
+                    ],
+                    "example": "expense"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Paid for gas"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "type": "object",
+                          "example": {
+                            "_id": "682b830e2e994e13ac53c7e5",
+                            "userId": "682b827b2e994e13ac53c7dd",
+                            "type": "expense",
+                            "amount": 150.5,
+                            "category": "Utilities",
+                            "date": "2025-05-18",
+                            "comment": "Paid for gas",
+                            "createdAt": "2025-05-19T19:14:22.538Z",
+                            "updatedAt": "2025-05-19T19:25:00.123Z"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
       }
     },
-=======
->>>>>>> fd6a6a4 (add swagger-statistics)
     "/auth/logout": {
       "post": {
         "tags": [
@@ -1000,57 +1122,66 @@
     "schemas": {
       "transactions": {
         "type": "object",
+        "required": [
+          "_id",
+          "userId",
+          "type",
+          "amount",
+          "category",
+          "date"
+        ],
         "properties": {
           "_id": {
+            "description": "Transaction id",
             "type": "string",
-            "description": "Unique identifier for the transaction",
-            "example": "66507f2cabc1234567890abc"
+            "example": "645a1b2c3d4e5f6789abcdef"
           },
           "userId": {
+            "description": "User id",
             "type": "string",
-            "description": "ID of the user who owns the transaction",
-            "example": "664abcdeff1234567890abcd"
+            "example": "645a1b2c3d4e5f6789abcde0"
           },
           "type": {
+            "description": "Transaction type",
             "type": "string",
             "enum": [
-              "+",
-              "-"
+              "income",
+              "expense"
             ],
-            "description": "Transaction type — income (\"+\") or expense (\"-\")",
-            "example": "+"
+            "example": "income"
           },
           "amount": {
+            "description": "Transaction amount",
             "type": "number",
-            "format": "float",
-            "description": "Amount of the transaction",
-            "example": 100.5
+            "example": 1000
           },
           "category": {
+            "description": "Transaction category",
             "type": "string",
-            "description": "Category of the transaction",
-            "example": "Food"
+            "example": "Incomes"
           },
           "date": {
+            "description": "Transaction date",
             "type": "string",
             "format": "date-time",
-            "description": "Date of the transaction",
-            "example": "2024-05-20T12:34:56.789Z"
+            "example": "2025-04-23T10:00:00.000Z"
           },
           "comment": {
+            "description": "Transaction comment",
             "type": "string",
-            "description": "Optional comment about the transaction",
-            "example": "Grocery shopping"
+            "example": "Зарплата"
           },
           "createdAt": {
+            "description": "Creation timestamp",
             "type": "string",
             "format": "date-time",
-            "example": "2024-05-20T12:34:56.789Z"
+            "example": "2025-05-21T12:34:56.789Z"
           },
           "updatedAt": {
+            "description": "Last update timestamp",
             "type": "string",
             "format": "date-time",
-            "example": "2024-05-21T08:15:00.000Z"
+            "example": "2025-05-21T12:34:56.789Z"
           }
         },
         "required": [
