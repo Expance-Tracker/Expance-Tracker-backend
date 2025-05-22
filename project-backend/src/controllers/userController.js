@@ -1,3 +1,17 @@
+
+// const User = require('../models/User');
+import { User } from '../models/User.js';
+
+import { User } from '../db/models/user.js';
+
+
+export const getBalance = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user)
+      return res.status(404).json({ message: 'Користувача не знайдено' });
+
 import { User } from '../db/models/user.js';
 
 export const getBalance = async (req, res, next) => {
@@ -5,11 +19,16 @@ export const getBalance = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+
     res.status(200).json({ balance: user.balance });
   } catch (error) {
     next(error);
   }
 };
+
+// Оновлення профілю
 
 export const updateProfile = async (req, res, next) => {
   try {
@@ -22,7 +41,13 @@ export const updateProfile = async (req, res, next) => {
     );
 
     if (!updatedUser)
+
+      return res.status(404).json({ message: 'Користувача не знайдено' });
+
       return res.status(404).json({ message: 'User not found' });
+
+      return res.status(404).json({ message: 'User not found' });
+
 
     res.status(200).json({ user: updatedUser });
   } catch (error) {

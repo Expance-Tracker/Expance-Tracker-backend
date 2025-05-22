@@ -9,17 +9,25 @@ info:
 tags:
   - name: Auth
     description: Auth operations.
+
+  - name: Statistics
+    description: Operations related to transaction summaries.
+
   - name: Transactions
     description: Operations for managing transactions.
+
 servers:
   - url: https://expance-tracker-backend-9zu7.onrender.com
 paths:
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
+
+
   /rates:
     get:
       $ref: ../swagger/paths/currencies/get.yaml
+
   /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml

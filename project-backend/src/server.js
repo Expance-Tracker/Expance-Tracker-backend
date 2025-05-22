@@ -10,8 +10,23 @@ import ratesRouter from './routers/rates.routes.js';
 import router from './routers/index.js';
 import statisticsRouter from './routers/statisticsRouter.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
+
+import statisticsRouter from './routers/statisticsRouter.js'
+
 import transactionsRouter from './routers/transactionsRouter.js';
 import userRouter from './routers/userRoutes.js';
+
+
+
+
+
+import transactionsRouter from './routers/transactionsRouter.js';
+import userRouter from './routers/userRoutes.js';
+
+
+import transactionsRouter from './routers/transactionsRouter.js';
+import userRouter from './routers/userRoutes.js';
+
 
 const port = Number(getEnvVar('PORT', 3000));
 
@@ -21,7 +36,13 @@ export const startServer = () => {
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
+
+  app.use('/api-docs', ...swaggerDocs());
+
   app.use('/api-docs', swaggerDocs());
+
+  app.use('/api-docs', swaggerDocs());
+
 
   app.use(
     pino({
@@ -43,9 +64,25 @@ export const startServer = () => {
   app.use('/user', userRouter);
   app.use('/rates', ratesRouter);
 
+
+
   app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
+
+
+  app.listen(port, () =>
+    console.log(`🚀 Server is running on port ${port}`)
+  );
+
+  app.listen(port, () => console.log(`🚀 Server is running on port ${port}`));
+
+};
+
+startServer();
+
+
+
 
   app.listen(port, () => console.log(`🚀 Server is running on port ${port}`));
 };
