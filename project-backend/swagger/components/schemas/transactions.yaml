@@ -1,0 +1,55 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: Unique identifier for the transaction
+    example: 66507f2cabc1234567890abc
+
+  userId:
+    type: string
+    description: ID of the user who owns the transaction
+    example: 664abcdeff1234567890abcd
+
+  type:
+    type: string
+    enum: ['+', '-']
+    description: Transaction type — income ("+") or expense ("-")
+    example: '+'
+
+  amount:
+    type: number
+    format: float
+    description: Amount of the transaction
+    example: 100.5
+
+  category:
+    type: string
+    description: Category of the transaction
+    example: Food
+
+  date:
+    type: string
+    format: date-time
+    description: Date of the transaction
+    example: 2024-05-20T12:34:56.789Z
+
+  comment:
+    type: string
+    description: Optional comment about the transaction
+    example: Grocery shopping
+
+  createdAt:
+    type: string
+    format: date-time
+    example: 2024-05-20T12:34:56.789Z
+
+  updatedAt:
+    type: string
+    format: date-time
+    example: 2024-05-21T08:15:00.000Z
+required:
+  - userId
+  - type
+  - amount
+  - category
+  - date

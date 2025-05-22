@@ -17,10 +17,11 @@ export const updateProfile = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { name, email },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
-    if (!updatedUser) return res.status(404).json({ message: 'Користувача не знайдено' });
+    if (!updatedUser)
+      return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({ user: updatedUser });
   } catch (error) {
