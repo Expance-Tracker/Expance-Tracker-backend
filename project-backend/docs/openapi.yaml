@@ -11,6 +11,8 @@ tags:
     description: Operations about users.
   - name: Auth
     description: Auth operations.
+  - name: Statistics
+    description: Operations related to transaction summaries.
 servers:
   - url: http://localhost:3000
   - url: https://example.com/api/v1
@@ -18,7 +20,7 @@ paths:
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
-      /statistics/summary:
+  /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
   /transactions:
@@ -31,7 +33,6 @@ paths:
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
- 
 components:
   securitySchemes:
     bearerAuth:

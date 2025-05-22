@@ -8,11 +8,18 @@ import pino from 'pino-http';
 import router from './routers/index.js';
 import { swaggerDocs } from './middlewares/swaggerDocs.js';
 import statisticsRouter from './routers/statisticsRouter.js'
+<<<<<<< HEAD
 import transactionsRouter from './routers/transactionsRouter.js';
 import userRouter from './routers/userRoutes.js';
 
 
 
+=======
+
+import transactionsRouter from './routers/transactionsRouter.js';
+import userRouter from './routers/userRoutes.js';
+
+>>>>>>> fd6a6a4 (add swagger-statistics)
 const port = Number(getEnvVar('PORT', 3000));
 
 export const startServer = () => {
@@ -21,7 +28,11 @@ export const startServer = () => {
   app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
+<<<<<<< HEAD
   app.use('/api-docs', ...swaggerDocs());
+=======
+  app.use('/api-docs', swaggerDocs());
+>>>>>>> fd6a6a4 (add swagger-statistics)
 
   app.use(
     pino({
@@ -44,15 +55,22 @@ export const startServer = () => {
   app.use('/user', userRouter);
   app.use('/rates', ratesRouter);
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> fd6a6a4 (add swagger-statistics)
   app.use(router);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
+<<<<<<< HEAD
   app.listen(port, () =>
     console.log(`🚀 Server is running on port ${port}`)
   );
+=======
+  app.listen(port, () => console.log(`🚀 Server is running on port ${port}`));
+>>>>>>> fd6a6a4 (add swagger-statistics)
 };
 
 startServer();
