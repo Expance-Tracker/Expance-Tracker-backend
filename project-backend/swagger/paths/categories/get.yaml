@@ -22,26 +22,36 @@ responses:
             incomeCategories:
               type: array
               items:
-                type: string
-              example: ['Incomes']
+                $ref: '../../components/schemas/category.yaml'
+                example:
+                  - id: '664b04ae87c2f221f99d3c01'
+                    name: 'Incomes'
             expenseCategories:
               type: array
               items:
-                type: string
+                $ref: '../../components/schemas/category.yaml'
               example:
-                [
-                  'Main expenses',
-                  'Self сare',
-                  'Child, care',
-                  'Products',
-                  'Car',
-                  'Education',
-                  'Leisure',
-                  'Household products',
-                  'Entertainment',
-                  'Other expenses',
-                ]
-  '401':
-    $ref: '../../components/responses/401.yaml'
+                - id: '664b04ae87c2f221f99d3c02'
+                  name: 'Main expenses'
+                - id: '664b04ae87c2f221f99d3c03'
+                  name: 'Products'
+                - id: '664b04ae87c2f221f99d3c04'
+                  name: 'Car'
+                - id: '664b04ae87c2f221f99d3c05'
+                  name: 'Self care'
+                - id: '664b04ae87c2f221f99d3c06'
+                  name: 'Child care'
+                - id: '664b04ae87c2f221f99d3c07'
+                  name: 'Household products'
+                - id: '664b04ae87c2f221f99d3c08'
+                  name: 'Education'
+                - id: '664b04ae87c2f221f99d3c09'
+                  name: 'Leisure'
+                - id: '664b04ae87c2f221f99d3c10'
+                  name: 'Other expenses'
+                - id: '664b04ae87c2f221f99d3c11'
+                  name: 'Entertainment'
+  '404':
+    $ref: '../../components/responses/404.yaml'
   '500':
     $ref: '../../components/responses/500.yaml'
