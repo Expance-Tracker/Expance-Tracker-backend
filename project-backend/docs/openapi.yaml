@@ -21,6 +21,10 @@ paths:
     get:
       $ref: ../swagger/paths/categories/get.yaml
 
+  /rates:
+    get:
+      $ref: ../swagger/paths/currencies/get.yaml
+
   /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
