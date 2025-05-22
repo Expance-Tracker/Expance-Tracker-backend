@@ -6,43 +6,36 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: API documentation of Spendy Expense Tracker App
-
 tags:
   - name: Auth
     description: Auth operations.
   - name: Transactions
-    description: Operations related to user transactions.
-
+    description: Operations for managing transactions.
 servers:
   - url: https://expance-tracker-backend-9zu7.onrender.com
-
 paths:
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
-
   /rates:
     get:
       $ref: ../swagger/paths/currencies/get.yaml
-
   /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
-
   /transactions:
     get:
       $ref: ../swagger/paths/transactions/get.yaml
-
+    post:
+      $ref: ../swagger/paths/transactions/post.yaml
   /transactions/{id}:
     delete:
       $ref: ../swagger/paths/transactions/{id}/delete.yaml
     put:
       $ref: ../swagger/paths/transactions/{id}/put.yaml
-
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
-
 components:
   securitySchemes:
     bearerAuth:
