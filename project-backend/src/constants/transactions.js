@@ -1,1 +1,1 @@
-export const transactionList = ['expense', 'income'];
+export const transactionList = ['income', 'expense'];
