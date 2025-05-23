@@ -6,7 +6,9 @@ export const createTransaction = (data) => {
 };
 
 export const getTransactions = (userId) => {
-  return Transaction.find({ userId: new mongoose.Types.ObjectId(userId) });
+  return Transaction.find({ userId: new mongoose.Types.ObjectId(userId) }).sort(
+    { createdAt: -1 },
+  );
 };
 
 export const deleteTransactionByID = (_id, userId) => {
