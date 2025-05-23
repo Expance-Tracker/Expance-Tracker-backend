@@ -593,7 +593,7 @@
                   "comment": {
                     "description": "Transaction comment (optional)",
                     "type": "string",
-                    "example": "Зарплата"
+                    "example": "Income"
                   }
                 }
               }
@@ -994,7 +994,7 @@
           "comment": {
             "type": "string",
             "description": "Optional comment about the transaction",
-            "example": "Зарплата"
+            "example": "Income"
           },
           "createdAt": {
             "type": "string",

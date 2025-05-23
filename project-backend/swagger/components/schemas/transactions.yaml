@@ -30,7 +30,7 @@ properties:
   comment:
     type: string
     description: Optional comment about the transaction
-    example: Зарплата
+    example: Income
   createdAt:
     type: string
     format: date-time
