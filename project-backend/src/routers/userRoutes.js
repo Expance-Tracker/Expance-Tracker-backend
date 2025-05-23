@@ -1,8 +1,10 @@
-import { getBalance, updateProfile } from '../controllers/userController.js';
+import { getBalance, updateProfile, getCurrentUser } from '../controllers/userController.js';
 import { Router } from 'express';
 import authenticate from '../middlewares/authenticate.js';
 
 const userRouter = Router();
+
+userRouter.get('/', authenticate, getCurrentUser);
 
 userRouter.get('/balance', authenticate, getBalance);
 

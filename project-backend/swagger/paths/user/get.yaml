@@ -1,0 +1,52 @@
+get:
+  tags:
+    - User
+  summary: Get current user info
+  description: Returns data about the currently authenticated user.
+  operationId: getCurrentUser
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Successfully retrieved user info!
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - status
+              - message
+              - data
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: User info fetched successfully!
+              data:
+                type: object
+                required:
+                  - name
+                  - email
+                  - createdAt
+                properties:
+                  name:
+                    type: string
+                    example: Maria Bale
+                  email:
+                    type: string
+                    format: email
+                    example: mashenkast12@example.com
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: 2025-01-01T00:00:00.000Z
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
