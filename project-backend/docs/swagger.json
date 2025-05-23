@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://expance-tracker-backend-9zu7.onrender.com"
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [
@@ -33,6 +33,222 @@
     }
   ],
   "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "operationId": "registerUser",
+        "description": "Create a new user account",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "User name (3-32 characters)",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 32,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User email (max 64 characters)",
+                    "type": "string",
+                    "maxLength": 64,
+                    "format": "email",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User password (8-64 characters)",
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "example": "12345647988"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User password",
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "FoiNxa5knPpk5Ty3ngt6h46F6M146P3EiS0eszFt"
+                        }
+                      },
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Logout a user"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": [
@@ -689,6 +905,37 @@
       }
     },
     "schemas": {
+      "user": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password",
+          "_id"
+        ],
+        "properties": {
+          "name": {
+            "description": "User name",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "description": "User email",
+            "type": "string",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "description": "User password",
+            "type": "string",
+            "example": "66aafbef2e949884e942be16"
+          },
+          "_id": {
+            "description": "User id",
+            "type": "string",
+            "example": "66aafbef2e949884e942be16"
+          }
+        }
+      },
       "category": {
         "type": "object",
         "properties": {
@@ -876,6 +1123,43 @@
                     "message": {
                       "type": "string",
                       "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ConflictError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User already registered"
                     }
                   }
                 }
