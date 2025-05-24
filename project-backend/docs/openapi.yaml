@@ -47,3 +47,21 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
+
+paths:
+  /auth/register:
+    $ref: "../swagger/paths/auth/register.yaml"
+    
+  /transactions/{id}:
+    $ref: "../swagger/paths/transactions/{id}/get.yaml"
+
+  /user/balance:
+    $ref: "../swagger/paths/user/balance.yaml"
+  /user/profile:
+    $ref: "../swagger/paths/user/profile.yaml"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
