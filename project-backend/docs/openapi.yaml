@@ -23,7 +23,6 @@ paths:
     get:
       $ref: ../swagger/paths/categories/get.yaml
 
-
   /rates:
     get:
       $ref: ../swagger/paths/currencies/get.yaml
@@ -44,6 +43,9 @@ paths:
   /auth/logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
+  /login:
+    post:
+      $ref: ../swagger/paths/auth/login/post.yaml
 components:
   securitySchemes:
     bearerAuth:

@@ -28,10 +28,16 @@ export const registerUser = async (payload) => {
     const { password, ...rest } = payload;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    
-    console.log('Attempting to create user with payload:', { ...rest, password: '[HIDDEN]' });
+
+    console.log('Attempting to create user with payload:', {
+      ...rest,
+      password: '[HIDDEN]',
+    });
     const user = await User.create({ ...rest, password: hashedPassword });
-    console.log('User created successfully:', { ...user.toObject(), password: '[HIDDEN]' });
+    console.log('User created successfully:', {
+      ...user.toObject(),
+      password: '[HIDDEN]',
+    });
     return user;
   } catch (error) {
     console.error('Error creating user:', error);
