@@ -1,13 +1,17 @@
-import { getBalance, updateProfile, getCurrentUser } from '../controllers/userController.js';
 import { Router } from 'express';
+import { getBalance, updateProfile, getCurrentUser } from '../controllers/userController.js';
 import authenticate from '../middlewares/authenticate.js';
 
-const userRouter = Router();
+const router = Router();
 
-userRouter.get('/', authenticate, getCurrentUser);
+// поточний користувач
+router.get('/', authenticate, getCurrentUser);
 
-userRouter.get('/balance', authenticate, getBalance);
+// баланс
+router.get('/balance', authenticate, getBalance);
 
-userRouter.patch('/profile', authenticate, updateProfile);
+// оновлення профілю
+router.patch('/profile', authenticate, updateProfile);
 
-export default userRouter;
+export default router;
+

@@ -1,0 +1,13 @@
+get:
+  summary: Get current user balance
+  tags:
+    - User
+  security:
+    - bearerAuth: []
+  responses:
+    "200":
+      $ref: "../../components/responses/BalanceResponse.yaml"
+    "401":
+      $ref: "../../components/responses/Unauthorized.yaml"
+    "404":
+      $ref: "../../components/responses/NotFound.yaml"
