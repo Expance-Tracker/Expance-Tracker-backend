@@ -1,0 +1,11 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    description: Unique identifier of the category
+    example: '664b04ae87c2f221f99d3c61'
+  name:
+    type: string
+    description: Name of the category
+    example: 'Products'

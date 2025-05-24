@@ -16,16 +16,22 @@ requestBody:
           - password
         properties:
           name:
-            description: 'User name'
+            description: 'User name (3-32 characters)'
             type: string
+            minLength: 3
+            maxLength: 32
             example: 'John Doe'
           email:
-            description: 'User email'
+            description: 'User email (max 64 characters)'
             type: string
+            maxLength: 64
+            format: email
             example: 'example@gmail.com'
           password:
-            description: 'User password'
+            description: 'User password (8-64 characters)'
             type: string
+            minLength: 8
+            maxLength: 64
             example: '12345647988'
 responses:
   '201':
