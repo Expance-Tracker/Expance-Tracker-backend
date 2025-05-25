@@ -39,7 +39,7 @@ requestBody:
           comment:
             description: 'Transaction comment (optional)'
             type: string
-            example: 'Зарплата'
+            example: 'Income'
 responses:
   '201':
     description: 'Creates a transaction'

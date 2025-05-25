@@ -18,15 +18,23 @@ tags:
 
 servers:
   - url: https://expance-tracker-backend-9zu7.onrender.com
+  # - url: http://localhost:3000
 paths:
+  /register:
+    post:
+      $ref: ../swagger/paths/auth/register/post.yaml
+  /login:
+    post:
+      $ref: ../swagger/paths/auth/login/post.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout/post.yaml
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
-
   /rates:
     get:
       $ref: ../swagger/paths/currencies/get.yaml
-
   /statistics/summary:
     get:
       $ref: ../swagger/paths/statistics/summary.yaml
@@ -40,12 +48,6 @@ paths:
       $ref: ../swagger/paths/transactions/{id}/delete.yaml
     put:
       $ref: ../swagger/paths/transactions/{id}/put.yaml
-  /auth/logout:
-    post:
-      $ref: ../swagger/paths/auth/logout/post.yaml
-  /login:
-    post:
-      $ref: ../swagger/paths/auth/login/post.yaml
 components:
   securitySchemes:
     bearerAuth:
