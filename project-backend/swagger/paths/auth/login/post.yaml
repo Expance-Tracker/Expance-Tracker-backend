@@ -44,10 +44,18 @@ responses:
               type: object
               required:
                 - accessToken
+                - name
+                - email
               properties:
                 accessToken:
                   type: string
                   example: 'FoiNxa5knPpk5Ty3ngt6h46F6M146P3EiS0eszFt'
+                name:
+                  type: string
+                  example: User1
+                email:
+                  type: string
+                  example: example@gmail.com
               $ref: '../../../components/schemas/user.yaml'
   '400':
     $ref: '../../../components/responses/400.yaml'
