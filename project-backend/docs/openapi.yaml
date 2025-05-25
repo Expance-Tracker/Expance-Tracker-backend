@@ -9,16 +9,12 @@ info:
 tags:
   - name: Auth
     description: Auth operations.
-
   - name: Statistics
     description: Operations related to transaction summaries.
-
   - name: Transactions
     description: Operations for managing transactions.
-
 servers:
   - url: https://expance-tracker-backend-9zu7.onrender.com
-  # - url: http://localhost:3000
 paths:
   /register:
     post:
