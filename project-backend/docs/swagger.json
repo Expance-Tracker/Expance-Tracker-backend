@@ -26,6 +26,10 @@
     {
       "name": "Transactions",
       "description": "Operations for managing transactions."
+    },
+    {
+      "name": "User",
+      "description": "Operations related to user information."
     }
   ],
   "paths": {
@@ -442,6 +446,20 @@
               "example": "2024-11"
             },
             "description": "Month in YYYY-MM format"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ],
+              "example": "expense"
+            },
+            "description": "Transaction type - income or expense"
           }
         ],
         "responses": {
@@ -449,37 +467,54 @@
             "description": "Successful response",
             "content": {
               "application/json": {
-                "example": [
-                  {
-                    "type": "expense",
-                    "totalAmount": 350,
-                    "categories": [
-                      {
-                        "category": "Food",
-                        "total": 200
-                      },
-                      {
-                        "category": "Transport",
-                        "total": 150
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "expense"
+                    },
+                    "totalAmount": {
+                      "type": "number",
+                      "example": 350
+                    },
+                    "categories": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "category": {
+                            "type": "string",
+                            "example": "Food"
+                          },
+                          "total": {
+                            "type": "number",
+                            "example": 200
+                          }
+                        }
                       }
-                    ]
-                  },
-                  {
-                    "type": "income",
-                    "totalAmount": 3000,
-                    "categories": [
-                      {
-                        "category": "Salary",
-                        "total": 3000
-                      }
-                    ]
+                    }
                   }
-                ]
+                },
+                "example": {
+                  "type": "expense",
+                  "totalAmount": 350,
+                  "categories": [
+                    {
+                      "category": "Food",
+                      "total": 200
+                    },
+                    {
+                      "category": "Transport",
+                      "total": 150
+                    }
+                  ]
+                }
               }
             }
           },
           "400": {
-            "description": "Invalid or missing month parameter"
+            "description": "Invalid or missing query parameters"
           },
           "401": {
             "description": "Unauthorized – Access token missing or expired"
@@ -803,8 +838,75 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user info",
+        "description": "Returns data about the currently authenticated user.",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user info!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User info fetched successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Maria Bale"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "mashenkast12@example.com"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-01T00:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
+  
   "components": {
     "securitySchemes": {
       "bearerAuth": {
