@@ -223,7 +223,7 @@
         }
       }
     },
-    "/auth/logout": {
+    "/logout": {
       "post": {
         "tags": [
           "Auth"
