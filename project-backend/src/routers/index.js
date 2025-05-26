@@ -4,6 +4,7 @@ import transactionsRouter from './transactionsRouter.js';
 import categoriesRouter from './categories.js';
 import userRouter from './userRoutes.js';
 import ratesRrouter from './rates.routes.js';
+import statisticsRouter from './statisticsRouter.js';
 
 const router = Router();
 
@@ -21,5 +22,8 @@ router.use('/user', userRouter);
 
 // Роут інформації відзнак
 router.use('/rates', ratesRrouter);
+
+// Роут статистики
+router.use('/statistics', statisticsRouter);
 
 export default router;

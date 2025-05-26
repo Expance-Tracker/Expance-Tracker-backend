@@ -12,26 +12,243 @@
   "servers": [
     {
       "url": "http://localhost:3000"
-    },
-    {
-      "url": "https://example.com/api/v1"
     }
   ],
   "tags": [
-    {
-      "name": "Users",
-      "description": "Operations about users."
-    },
     {
       "name": "Auth",
       "description": "Auth operations."
     },
     {
+      "name": "Statistics",
+      "description": "Operations related to transaction summaries."
+    },
+    {
       "name": "Transactions",
-      "description": "Operations related to user transactions."
+      "description": "Operations for managing transactions."
+    },
+    {
+      "name": "User",
+      "description": "Operations related to user information."
     }
   ],
   "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "operationId": "registerUser",
+        "description": "Create a new user account",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "User name (3-32 characters)",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 32,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "User email (max 64 characters)",
+                    "type": "string",
+                    "maxLength": 64,
+                    "format": "email",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User password (8-64 characters)",
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 64,
+                    "example": "12345647988"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "User email",
+                    "type": "string",
+                    "example": "example@gmail.com"
+                  },
+                  "password": {
+                    "description": "User password",
+                    "type": "string",
+                    "example": "123456789"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "type": "string",
+                          "example": "FoiNxa5knPpk5Ty3ngt6h46F6M146P3EiS0eszFt"
+                        }
+                      },
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Logout a user"
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "tags": [
@@ -64,29 +281,126 @@
                     "incomeCategories": {
                       "type": "array",
                       "items": {
-                        "type": "string"
-                      },
-                      "example": [
-                        "Incomes"
-                      ]
+                        "$ref": "#/components/schemas/category",
+                        "example": [
+                          {
+                            "id": "664b04ae87c2f221f99d3c01",
+                            "name": "Incomes"
+                          }
+                        ]
+                      }
                     },
                     "expenseCategories": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/category"
                       },
                       "example": [
-                        "Main expenses",
-                        "Self сare",
-                        "Child, care",
-                        "Products",
-                        "Car",
-                        "Education",
-                        "Leisure",
-                        "Household products",
-                        "Entertainment",
-                        "Other expenses"
+                        {
+                          "id": "664b04ae87c2f221f99d3c02",
+                          "name": "Main expenses"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c03",
+                          "name": "Products"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c04",
+                          "name": "Car"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c05",
+                          "name": "Self care"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c06",
+                          "name": "Child care"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c07",
+                          "name": "Household products"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c08",
+                          "name": "Education"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c09",
+                          "name": "Leisure"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c10",
+                          "name": "Other expenses"
+                        },
+                        {
+                          "id": "664b04ae87c2f221f99d3c11",
+                          "name": "Entertainment"
+                        }
                       ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/rates": {
+      "get": {
+        "tags": [
+          "Currencies"
+        ],
+        "summary": "Get currency exchange rates (UAH to USD and EUR)",
+        "operationId": "getRates",
+        "description": "Returns current currency exchange rates from Monobank API.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched currency rates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "currencyCodeA": {
+                        "type": "integer",
+                        "description": "ISO 4217 numeric currency code (e.g., 840 = USD, 978 = EUR)",
+                        "example": 840
+                      },
+                      "currencyCodeB": {
+                        "type": "integer",
+                        "description": "ISO 4217 numeric currency code (e.g., 980 = UAH)",
+                        "example": 980
+                      },
+                      "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Date and time of rate in ISO 8601 format",
+                        "example": "2024-05-22T15:00:00Z"
+                      },
+                      "rateBuy": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 39.4
+                      },
+                      "rateSell": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 39.9
+                      }
                     }
                   }
                 }
@@ -96,6 +410,9 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -104,71 +421,69 @@
     },
     "/statistics/summary": {
       "get": {
-        "get": {
-          "tags": [
-            "Statistics"
-          ],
-          "summary": "Get income/expense report for a specific month",
-          "description": "Returns total amounts of income and expenses grouped by categories for the selected month.",
-          "parameters": [
-            {
-              "in": "query",
-              "name": "month",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "example": "2024-11"
-              },
-              "description": "Month in YYYY-MM format"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful response",
-              "content": {
-                "application/json": {
-                  "example": [
-                    {
-                      "type": "expense",
-                      "totalAmount": 350,
-                      "categories": [
-                        {
-                          "category": "Food",
-                          "total": 200
-                        },
-                        {
-                          "category": "Transport",
-                          "total": 150
-                        }
-                      ]
-                    },
-                    {
-                      "type": "income",
-                      "totalAmount": 3000,
-                      "categories": [
-                        {
-                          "category": "Salary",
-                          "total": 3000
-                        }
-                      ]
-                    }
-                  ]
-                }
+        "tags": [
+          "Statistics"
+        ],
+        "summary": "Get income/expense report for a specific month",
+        "description": "Returns total amounts of income and expenses grouped by categories for the selected month.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "month",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "2024-11"
+            },
+            "description": "Month in YYYY-MM format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "type": "expense",
+                    "totalAmount": 350,
+                    "categories": [
+                      {
+                        "category": "Food",
+                        "total": 200
+                      },
+                      {
+                        "category": "Transport",
+                        "total": 150
+                      }
+                    ]
+                  },
+                  {
+                    "type": "income",
+                    "totalAmount": 3000,
+                    "categories": [
+                      {
+                        "category": "Salary",
+                        "total": 3000
+                      }
+                    ]
+                  }
+                ]
               }
-            },
-            "400": {
-              "description": "Invalid or missing month parameter"
-            },
-            "401": {
-              "description": "Unauthorized – Access token missing or expired"
             }
           },
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ]
-        }
+          "400": {
+            "description": "Invalid or missing month parameter"
+          },
+          "401": {
+            "description": "Unauthorized – Access token missing or expired"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/transactions": {
@@ -178,6 +493,7 @@
         "tags": [
           "Transactions"
         ],
+        "operationId": "getTransactions",
         "security": [
           {
             "bearerAuth": []
@@ -190,6 +506,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -197,7 +518,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Transactions fetched successfully!"
+                      "example": "Transactions fetched successfully"
                     },
                     "data": {
                       "type": "array",
@@ -211,10 +532,111 @@
             }
           },
           "401": {
-            "description": "Unauthorized - Invalid or missing token"
+            "$ref": "#/components/responses/401"
           },
           "500": {
-            "description": "Internal server error"
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create transaction",
+        "operationId": "createTransaction",
+        "description": "Create a new transaction",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type",
+                  "amount",
+                  "category",
+                  "date"
+                ],
+                "properties": {
+                  "type": {
+                    "description": "Transaction type (income or expense)",
+                    "type": "string",
+                    "enum": [
+                      "income",
+                      "expense"
+                    ],
+                    "example": "income"
+                  },
+                  "amount": {
+                    "description": "Transaction amount",
+                    "type": "number",
+                    "format": "double",
+                    "minimum": 0,
+                    "example": 1000
+                  },
+                  "category": {
+                    "description": "Transaction category",
+                    "type": "string",
+                    "example": "Incomes"
+                  },
+                  "date": {
+                    "description": "Transaction date",
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2025-04-23T10:00:00Z"
+                  },
+                  "comment": {
+                    "description": "Transaction comment (optional)",
+                    "type": "string",
+                    "example": "Income"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates a transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction created successfully"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/transactions"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -407,6 +829,72 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get current user info",
+        "description": "Returns data about the currently authenticated user.",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user info!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User info fetched successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Maria Bale"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "mashenkast12@example.com"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-01T00:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -414,6 +902,121 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "user": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password",
+          "_id"
+        ],
+        "properties": {
+          "name": {
+            "description": "User name",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "description": "User email",
+            "type": "string",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "description": "User password",
+            "type": "string",
+            "example": "66aafbef2e949884e942be16"
+          },
+          "_id": {
+            "description": "User id",
+            "type": "string",
+            "example": "66aafbef2e949884e942be16"
+          }
+        }
+      },
+      "category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier of the category",
+            "example": "664b04ae87c2f221f99d3c61"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the category",
+            "example": "Products"
+          }
+        }
+      },
+      "transactions": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Unique identifier for the transaction",
+            "example": "645a1b2c3d4e5f6789abcdef"
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID of the user who owns the transaction",
+            "example": "645a1b2c3d4e5f6789abcde0"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ],
+            "description": "Transaction type — income or expense",
+            "example": "income"
+          },
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "description": "Amount of the transaction",
+            "example": 1000
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of the transaction",
+            "example": "Incomes"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date of the transaction",
+            "example": "2025-04-23T10:00:00.000Z"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Optional comment about the transaction",
+            "example": "Income"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2025-05-21T12:34:56.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last update timestamp",
+            "example": "2025-05-21T12:34:56.789Z"
+          }
+        },
+        "required": [
+          "_id",
+          "userId",
+          "type",
+          "amount",
+          "category",
+          "date"
+        ]
       }
     },
     "responses": {
@@ -445,7 +1048,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Invalid or missing contact ID or malformed request data. Please check your input and try again."
+                      "example": "Invalid or malformed request data. Please check your input and try again."
                     }
                   }
                 }
@@ -519,7 +1122,44 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Contact or user not found"
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ConflictError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User already registered"
                     }
                   }
                 }
@@ -564,71 +1204,6 @@
             }
           }
         }
-      }
-    },
-    "schemas": {
-      "transactions": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "description": "Unique identifier for the transaction",
-            "example": "66507f2cabc1234567890abc"
-          },
-          "userId": {
-            "type": "string",
-            "description": "ID of the user who owns the transaction",
-            "example": "664abcdeff1234567890abcd"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "+",
-              "-"
-            ],
-            "description": "Transaction type — income (\"+\") or expense (\"-\")",
-            "example": "+"
-          },
-          "amount": {
-            "type": "number",
-            "format": "float",
-            "description": "Amount of the transaction",
-            "example": 100.5
-          },
-          "category": {
-            "type": "string",
-            "description": "Category of the transaction",
-            "example": "Food"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Date of the transaction",
-            "example": "2024-05-20T12:34:56.789Z"
-          },
-          "comment": {
-            "type": "string",
-            "description": "Optional comment about the transaction",
-            "example": "Grocery shopping"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-05-20T12:34:56.789Z"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-05-21T08:15:00.000Z"
-          }
-        },
-        "required": [
-          "userId",
-          "type",
-          "amount",
-          "category",
-          "date"
-        ]
       }
     }
   }

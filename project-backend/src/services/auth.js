@@ -2,10 +2,9 @@ import {
   accessTokenLifeTime,
   refreshTokenLifeTime,
 } from '../constants/auth.js';
-import { log } from 'node:console';
-
+import bcrypt from 'bcrypt';
 import SessionCollection from '../db/models/session.js';
-import {User} from '../db/models/user.js';
+import { User } from '../db/models/user.js';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'node:crypto';
 
@@ -26,9 +25,13 @@ const createSession = () => {
 
 export const registerUser = async (payload) => {
   try {
-    console.log('Attempting to create user with payload:', payload);
-    const user = await User.create(payload);
-    console.log('User created successfully:', user);
+    const { password, ...rest } = payload;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
+    console.log('Attempting to create user with payload:', { ...rest, password: '[HIDDEN]' });
+    const user = await User.create({ ...rest, password: hashedPassword });
+    console.log('User created successfully:', { ...user.toObject(), password: '[HIDDEN]' });
     return user;
   } catch (error) {
     console.error('Error creating user:', error);
@@ -40,7 +43,6 @@ export const registerUser = async (payload) => {
 };
 
 // logout
-
 export const logoutUser = async (sessionId) => {
   await SessionCollection.deleteOne({ _id: sessionId });
 };
@@ -58,12 +60,8 @@ export const loginUser = async (payload) => {
     throw createHttpError(401, 'Email or password invalid!');
   }
 
-  //const comparedPassword = bcrypt.compare(password, user.password);
-  // if (!comparedPassword) {
-  //   throw createHttpError(401, 'Email or password invalid!');
-  // }
-
-  if (password !== user.password) {
+  const comparedPassword = await bcrypt.compare(password, user.password);
+  if (!comparedPassword) {
     throw createHttpError(401, 'Email or password invalid!');
   }
 

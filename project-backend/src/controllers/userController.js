@@ -10,6 +10,8 @@ export const getBalance = async (req, res, next) => {
   }
 };
 
+// Оновлення профілю
+
 export const updateProfile = async (req, res, next) => {
   try {
     const { name, email } = req.body;
@@ -26,5 +28,28 @@ export const updateProfile = async (req, res, next) => {
     res.status(200).json({ user: updatedUser });
   } catch (error) {
     next(error);
+  }
+};
+
+// Отримання поточного користувача
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(200).json({
+      status: 200,
+      message: 'User info fetched successfully',
+      data: {
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: 'Internal server error',
+      data: { message: error.message }
+    });
   }
 };

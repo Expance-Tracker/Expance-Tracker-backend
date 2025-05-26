@@ -1,37 +1,36 @@
-get:
-  tags:
-    - Statistics
-  summary: Get income/expense report for a specific month
-  description: Returns total amounts of income and expenses grouped by categories for the selected month.
-  parameters:
-    - in: query
-      name: month
-      required: true
-      schema:
-        type: string
-        example: '2024-11'
-      description: Month in YYYY-MM format
-  responses:
-    '200':
-      description: Successful response
-      content:
-        application/json:
-          example:
-            - type: 'expense'
-              totalAmount: 350
-              categories:
-                - category: 'Food'
-                  total: 200
-                - category: 'Transport'
-                  total: 150
-            - type: 'income'
-              totalAmount: 3000
-              categories:
-                - category: 'Salary'
-                  total: 3000
-    '400':
-      description: Invalid or missing month parameter
-    '401':
-      description: Unauthorized – Access token missing or expired
-  security:
-    - bearerAuth: []
+tags:
+  - Statistics
+summary: Get income/expense report for a specific month
+description: Returns total amounts of income and expenses grouped by categories for the selected month.
+parameters:
+  - in: query
+    name: month
+    required: true
+    schema:
+      type: string
+      example: '2024-11'
+    description: Month in YYYY-MM format
+responses:
+  '200':
+    description: Successful response
+    content:
+      application/json:
+        example:
+          - type: 'expense'
+            totalAmount: 350
+            categories:
+              - category: 'Food'
+                total: 200
+              - category: 'Transport'
+                total: 150
+          - type: 'income'
+            totalAmount: 3000
+            categories:
+              - category: 'Salary'
+                total: 3000
+  '400':
+    description: Invalid or missing month parameter
+  '401':
+    description: Unauthorized – Access token missing or expired
+security:
+  - bearerAuth: []
