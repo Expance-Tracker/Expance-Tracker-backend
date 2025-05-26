@@ -22,7 +22,7 @@ paths:
   /login:
     post:
       $ref: ../swagger/paths/auth/login/post.yaml
-  /auth/logout:
+  /logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
   /categories:
