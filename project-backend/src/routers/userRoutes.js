@@ -1,12 +1,16 @@
-const express = require('express');
-const { getBalance, updateProfile } = require('../controllers/userController');
-const auth = require('../middlewares/auth'); 
+import { Router } from 'express';
+import { getBalance, updateProfile, getCurrentUser } from '../controllers/userController.js';
+import authenticate from '../middlewares/authenticate.js';
 
-const router = express.Router();
+const router = Router();
 
-router.get('/balance', auth, getBalance);
+// поточний користувач
+router.get('/', authenticate, getCurrentUser);
 
-router.patch('/profile', auth, updateProfile);
+// баланс
+router.get('/balance', authenticate, getBalance);
 
-export default userRouter;
+// оновлення профілю
+router.patch('/profile', authenticate, updateProfile);
+
 export default router;
