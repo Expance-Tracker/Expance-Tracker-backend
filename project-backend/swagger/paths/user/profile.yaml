@@ -1,0 +1,21 @@
+patch:
+  summary: Update user profile
+  tags:
+    - User
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/UpdateProfileRequest.yaml
+  responses:
+    "200":
+      $ref: ../components/responses/UserResponse.yaml
+    "400":
+      $ref: ../components/responses/BadRequest.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "404":
+      $ref: ../components/responses/NotFound.yaml

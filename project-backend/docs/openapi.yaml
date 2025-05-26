@@ -48,8 +48,15 @@ paths:
       $ref: ../swagger/paths/transactions/{id}/delete.yaml
     put:
       $ref: ../swagger/paths/transactions/{id}/put.yaml
+
+      /user/balance:
+    $ref: ./swagger/paths/user/balance.yaml
+  /user/profile:
+    $ref: ./swagger/paths/user/profile.yaml
+    
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
+

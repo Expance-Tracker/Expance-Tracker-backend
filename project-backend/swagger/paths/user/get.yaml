@@ -50,3 +50,9 @@ get:
     $ref: '../../components/responses/500.yaml'
   '404':
     $ref: '../../components/responses/404.yaml'
+    "200":
+      $ref: ../components/responses/BalanceResponse.yaml
+    "401":
+      $ref: ../components/responses/Unauthorized.yaml
+    "404":
+      $ref: ../components/responses/NotFound.yaml
