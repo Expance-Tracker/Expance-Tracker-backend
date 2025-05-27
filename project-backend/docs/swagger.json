@@ -29,13 +29,23 @@
     },
     {
       "name": "User",
-      "description": "Operations related to user information."
+      "description": "User info operations."
+    },
+    {
+      "name": "Categories",
+      "description": "Categories operations."
+    },
+    {
+      "name": "Currencies",
+      "description": "Currency operations."
     }
   ],
   "paths": {
     "/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Register user",
         "operationId": "registerUser",
         "description": "Create a new user account",
@@ -49,7 +59,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email", "password"],
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "name": {
                     "description": "User name (3-32 characters)",
@@ -84,7 +98,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -117,7 +135,9 @@
     },
     "/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Login user",
         "operationId": "loginUser",
         "description": "Login user",
@@ -131,7 +151,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "password"],
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "description": "User email",
@@ -155,7 +178,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -167,7 +194,11 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": ["accessToken", "name", "email"],
+                      "required": [
+                        "accessToken",
+                        "name",
+                        "email"
+                      ],
                       "properties": {
                         "accessToken": {
                           "type": "string",
@@ -206,7 +237,9 @@
     },
     "/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout user",
         "operationId": "logoutUser",
         "description": "Logout user",
@@ -234,9 +267,296 @@
         }
       }
     },
+    "/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get current user info",
+        "description": "Returns data about the currently authenticated user.",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user info!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User info fetched successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "email",
+                        "createdAt"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "Maria Bale"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "mashenkast12@example.com"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-01-01T00:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/user/balance": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user balance",
+        "description": "Retrieves the current balance for the authenticated user.\nThe balance is calculated based on all user transactions (income minus expenses).\nUses cached balance for performance optimization and automatically recalculates when needed.\n",
+        "operationId": "getUserBalance",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Balance retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "balance"
+                  ],
+                  "properties": {
+                    "balance": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Current user balance calculated from all transactions",
+                      "example": 1250.75
+                    },
+                    "breakdown": {
+                      "type": "object",
+                      "description": "Detailed breakdown of balance calculation (optional, included when balance is recalculated)",
+                      "properties": {
+                        "totalIncome": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Total amount from all income transactions",
+                          "minimum": 0,
+                          "example": 2500
+                        },
+                        "totalExpense": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Total amount from all expense transactions",
+                          "minimum": 0,
+                          "example": 1249.25
+                        }
+                      },
+                      "required": [
+                        "totalIncome",
+                        "totalExpense"
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "simple_balance": {
+                    "summary": "Simple balance response",
+                    "value": {
+                      "balance": 1250.75
+                    }
+                  },
+                  "detailed_balance": {
+                    "summary": "Balance with breakdown",
+                    "value": {
+                      "balance": 1250.75,
+                      "breakdown": {
+                        "totalIncome": 2500,
+                        "totalExpense": 1249.25
+                      }
+                    }
+                  },
+                  "zero_balance": {
+                    "summary": "Zero balance",
+                    "value": {
+                      "balance": 0,
+                      "breakdown": {
+                        "totalIncome": 1000,
+                        "totalExpense": 1000
+                      }
+                    }
+                  },
+                  "negative_balance": {
+                    "summary": "Negative balance",
+                    "value": {
+                      "balance": -150.5,
+                      "breakdown": {
+                        "totalIncome": 800,
+                        "totalExpense": 950.5
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user profile",
+        "description": "Update the currently authenticated user's profile information.",
+        "operationId": "updateUserProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Updated"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john.updated@example.com"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User profile updated successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Updated"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "john.updated@example.com"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-05-27T12:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Get predefined income and expense categories",
         "operationId": "getCategories",
         "description": "Get list of categories with this endpoint",
@@ -337,7 +657,9 @@
     },
     "/rates": {
       "get": {
-        "tags": ["Currencies"],
+        "tags": [
+          "Currencies"
+        ],
         "summary": "Get currency exchange rates (UAH to USD and EUR)",
         "operationId": "getRates",
         "description": "Returns current currency exchange rates from Monobank API.",
@@ -402,7 +724,9 @@
     },
     "/statistics/summary": {
       "get": {
-        "tags": ["Statistics"],
+        "tags": [
+          "Statistics"
+        ],
         "summary": "Get income/expense report for a specific month",
         "description": "Returns total amounts of income and expenses grouped by categories for the selected month.",
         "parameters": [
@@ -422,7 +746,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["income", "expense"],
+              "enum": [
+                "income",
+                "expense"
+              ],
               "example": "expense"
             },
             "description": "Transaction type - income or expense"
@@ -497,7 +824,9 @@
       "get": {
         "summary": "Get all transactions",
         "description": "Returns a list of all transactions belonging to the authenticated user.",
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "operationId": "getTransactions",
         "security": [
           {
@@ -511,7 +840,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -541,7 +874,9 @@
         }
       },
       "post": {
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "summary": "Create transaction",
         "operationId": "createTransaction",
         "description": "Create a new transaction",
@@ -555,12 +890,20 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["type", "amount", "category", "date"],
+                "required": [
+                  "type",
+                  "amount",
+                  "category",
+                  "date"
+                ],
                 "properties": {
                   "type": {
                     "description": "Transaction type (income or expense)",
                     "type": "string",
-                    "enum": ["income", "expense"],
+                    "enum": [
+                      "income",
+                      "expense"
+                    ],
                     "example": "income"
                   },
                   "amount": {
@@ -598,7 +941,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -632,7 +979,9 @@
       "delete": {
         "summary": "Delete a transaction",
         "description": "Deletes a specific transaction by ID belonging to the authenticated user.",
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -666,7 +1015,9 @@
       },
       "put": {
         "summary": "Update a transaction",
-        "tags": ["Transactions"],
+        "tags": [
+          "Transactions"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -689,7 +1040,12 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["amount", "category", "date", "type"],
+                "required": [
+                  "amount",
+                  "category",
+                  "date",
+                  "type"
+                ],
                 "properties": {
                   "amount": {
                     "type": "number",
@@ -706,7 +1062,10 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["+", "-"],
+                    "enum": [
+                      "+",
+                      "-"
+                    ],
                     "example": "-"
                   },
                   "comment": {
@@ -772,177 +1131,6 @@
           }
         }
       }
-    },
-    "/user": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get current user info",
-        "description": "Returns data about the currently authenticated user.",
-        "operationId": "getCurrentUser",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved user info!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "User info fetched successfully!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "example": "Maria Bale"
-                        },
-                        "email": {
-                          "type": "string",
-                          "format": "email",
-                          "example": "mashenkast12@example.com"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2025-01-01T00:00:00.000Z"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/user/balance": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get user balance",
-        "description": "Retrieves the current balance for the authenticated user.\nThe balance is calculated based on all user transactions (income minus expenses).\nUses cached balance for performance optimization and automatically recalculates when needed.",
-        "operationId": "getUserBalance",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Balance retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": ["balance"],
-                  "properties": {
-                    "balance": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Current user balance calculated from all transactions",
-                      "example": 1250.75
-                    },
-                    "breakdown": {
-                      "type": "object",
-                      "description": "Detailed breakdown of balance calculation (optional, included when balance is recalculated)",
-                      "properties": {
-                        "totalIncome": {
-                          "type": "number",
-                          "format": "float",
-                          "description": "Total amount from all income transactions",
-                          "minimum": 0,
-                          "example": 2500.0
-                        },
-                        "totalExpense": {
-                          "type": "number",
-                          "format": "float",
-                          "description": "Total amount from all expense transactions",
-                          "minimum": 0,
-                          "example": 1249.25
-                        }
-                      },
-                      "required": ["totalIncome", "totalExpense"]
-                    }
-                  }
-                },
-                "examples": {
-                  "simple_balance": {
-                    "summary": "Simple balance response",
-                    "value": {
-                      "balance": 1250.75
-                    }
-                  },
-                  "detailed_balance": {
-                    "summary": "Balance with breakdown",
-                    "value": {
-                      "balance": 1250.75,
-                      "breakdown": {
-                        "totalIncome": 2500.0,
-                        "totalExpense": 1249.25
-                      }
-                    }
-                  },
-                  "zero_balance": {
-                    "summary": "Zero balance",
-                    "value": {
-                      "balance": 0.0,
-                      "breakdown": {
-                        "totalIncome": 1000.0,
-                        "totalExpense": 1000.0
-                      }
-                    }
-                  },
-                  "negative_balance": {
-                    "summary": "Negative balance",
-                    "value": {
-                      "balance": -150.5,
-                      "breakdown": {
-                        "totalIncome": 800.0,
-                        "totalExpense": 950.5
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
     }
   },
   "components": {
@@ -955,7 +1143,12 @@
     "schemas": {
       "user": {
         "type": "object",
-        "required": ["name", "email", "password", "_id"],
+        "required": [
+          "name",
+          "email",
+          "password",
+          "_id"
+        ],
         "properties": {
           "name": {
             "description": "User name",
@@ -1010,7 +1203,10 @@
           },
           "type": {
             "type": "string",
-            "enum": ["income", "expense"],
+            "enum": [
+              "income",
+              "expense"
+            ],
             "description": "Transaction type — income or expense",
             "example": "income"
           },
@@ -1049,7 +1245,14 @@
             "example": "2025-05-21T12:34:56.789Z"
           }
         },
-        "required": ["_id", "userId", "type", "amount", "category", "date"]
+        "required": [
+          "_id",
+          "userId",
+          "type",
+          "amount",
+          "category",
+          "date"
+        ]
       }
     },
     "responses": {
@@ -1059,7 +1262,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1071,7 +1278,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -1090,7 +1299,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1102,7 +1315,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -1121,7 +1336,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1133,7 +1352,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -1152,7 +1373,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1164,7 +1389,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -1183,7 +1410,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -1195,7 +1426,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
