@@ -1,64 +1,62 @@
-tags:
-  - Statistics
-summary: Get income/expense report for a specific month
-description: Returns total amounts of income and expenses grouped by categories for the selected month.
-parameters:
-  - in: query
-    name: month
-    required: true
-    schema:
-      type: string
-      example: '2024-11'
-    description: Month in YYYY-MM format
-
-  - in: query
-    name: type
-    required: true
-    schema:
-      type: string
-      enum: [income, expense]
-      example: expense
-    description: Transaction type: income or expense
-
-responses:
-  '200':
-    description: Successful response
-    content:
-      application/json:
+/statistics/summary:
+  get:
+    tags:
+      - Statistics
+    summary: Get income/expense report for a specific month
+    description: Returns total amounts of income and expenses grouped by categories for the selected month.
+    parameters:
+      - in: query
+        name: month
+        required: true
         schema:
-          type: object
-          properties:
-            type:
-              type: string
-              example: expense
-            totalAmount:
-              type: number
-              example: 350
-            categories:
-              type: array
-              items:
-                type: object
-                properties:
-                  category:
-                    type: string
-                    example: Food
-                  total:
-                    type: number
-                    example: 200
-        example:
-          type: 'expense'
-          totalAmount: 350
-          categories:
-            - category: 'Food'
-              total: 200
-            - category: 'Transport'
-              total: 150
-
-  '400':
-    description: Invalid or missing query parameters
-
-  '401':
-    description: Unauthorized – Access token missing or expired
-
-security:
-  - bearerAuth: []
+          type: string
+          pattern: '^\d{2}-\d{4}$'
+          example: '05-2025'
+        description: Month in MM-YYYY format (e.g. 05-2025)
+      - in: query
+        name: type
+        required: false
+        schema:
+          type: string
+          enum: [income, expenses]
+          example: expenses
+        description: Transaction type: income or expenses
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: expenses
+                totalAmount:
+                  type: number
+                  example: 350
+                categories:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      category:
+                        type: string
+                        example: Food
+                      total:
+                        type: number
+                        example: 200
+            example:
+              type: 'expenses'
+              totalAmount: 350
+              categories:
+                - category: 'Food'
+                  total: 200
+                - category: 'Transport'
+                  total: 150
+      '400':
+        description: Invalid or missing query parameters
+      '401':
+        description: Unauthorized – Access token missing or expired
+    security:
+      - bearerAuth: []
