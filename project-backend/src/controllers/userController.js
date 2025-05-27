@@ -1,42 +1,49 @@
 import { User } from '../db/models/user.js';
+import { getUserBalance } from '../services/balanceService.js';
 
 export const getBalance = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    const userId = req.user.id || req.user._id;
+    const balanceData = await getUserBalance(userId);
 
-    res.status(200).json({ balance: user.balance });
+    res.status(200).json({
+      balance: balanceData.balance,
+      breakdown: balanceData.breakdown,
+    });
   } catch (error) {
     next(error);
   }
 };
-
-// Оновлення профілю
 
 export const updateProfile = async (req, res, next) => {
   try {
     const { name, email } = req.body;
+    const userId = req.user.id || req.user._id;
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
+      userId,
       { name, email },
       { new: true, runValidators: true },
     );
 
-    if (!updatedUser)
+    if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
+    }
 
-    res.status(200).json({ user: updatedUser });
+    res.status(200).json({
+      status: 200,
+      message: 'Profile updated successfully',
+      data: { user: updatedUser },
+    });
   } catch (error) {
     next(error);
   }
 };
 
-// Отримання поточного користувача
-
-export const getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res, next) => {
   try {
     const user = req.user;
+
     res.status(200).json({
       status: 200,
       message: 'User info fetched successfully',
@@ -44,13 +51,9 @@ export const getCurrentUser = async (req, res) => {
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
-      }
+      },
     });
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      message: 'Internal server error',
-      data: { message: error.message }
-    });
+    next(error);
   }
 };

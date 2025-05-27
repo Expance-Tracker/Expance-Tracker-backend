@@ -1,0 +1,33 @@
+type: object
+required:
+  - balance
+properties:
+  balance:
+    type: number
+    format: float
+    description: Current user balance calculated from all transactions (income minus expenses)
+    example: 1250.75
+  breakdown:
+    type: object
+    description: Detailed breakdown of balance calculation (optional, included when balance is recalculated)
+    properties:
+      totalIncome:
+        type: number
+        format: float
+        description: Total amount from all income transactions
+        minimum: 0
+        example: 2500.00
+      totalExpense:
+        type: number
+        format: float
+        description: Total amount from all expense transactions
+        minimum: 0
+        example: 1249.25
+    required:
+      - totalIncome
+      - totalExpense
+example:
+  balance: 1250.75
+  breakdown:
+    totalIncome: 2500.00
+    totalExpense: 1249.25
