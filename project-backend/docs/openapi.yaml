@@ -13,6 +13,12 @@ tags:
     description: Operations related to transaction summaries.
   - name: Transactions
     description: Operations for managing transactions.
+  - name: User
+    description: User info operations.
+  - name: Categories
+    description: Categories operations.
+  - name: Currencies
+    description: Currency operations.
 servers:
   - url: https://expance-tracker-backend-9zu7.onrender.com
 paths:
@@ -25,6 +31,15 @@ paths:
   /logout:
     post:
       $ref: ../swagger/paths/auth/logout/post.yaml
+  /user:
+    get:
+      $ref: ../swagger/paths/user/get.yaml
+  /user/balance:
+    get:
+      $ref: ../swagger/paths/user/balance/get.yaml
+  /user/profile:
+    patch:
+      $ref: ../swagger/paths/user/patch.yaml
   /categories:
     get:
       $ref: ../swagger/paths/categories/get.yaml
