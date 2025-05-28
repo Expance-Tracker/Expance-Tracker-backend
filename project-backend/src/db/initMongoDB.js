@@ -17,7 +17,7 @@ export const initMongoDB = async () => {
 
     console.log('✅ MongoDB connected successfully!');
   } catch (error) {
-    console.error('❌ Critical MongoDB connection error:');
+    console.error('❌ Critical MongoDB connection error:', error.message);
     process.exit(1);
   }
 };
